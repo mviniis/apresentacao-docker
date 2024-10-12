@@ -58,7 +58,7 @@ function executarConsultas() {
 }
 
 function realizarConsulta() {
-  let url = 'http://clientes.local/arquivos/projeto-teste-back';
+  let url = 'http://localhost:8000';
   $.ajax({
     url: url,
     method: 'GET',
