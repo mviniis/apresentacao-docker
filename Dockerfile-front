@@ -1,0 +1,11 @@
+FROM php:8.3-apache
+
+COPY projeto-front/ /var/www/html/
+
+VOLUME ["/var/www/html/"]
+WORKDIR /var/www/html/
+
+RUN chown -R www-data:www-data /var/www/html/ && chmod -R 775 /var/www/html/
+
+RUN a2enmod rewrite
+CMD [ "apache2-freground" ]
