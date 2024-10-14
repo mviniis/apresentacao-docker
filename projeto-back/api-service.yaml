@@ -1,0 +1,12 @@
+apiVersion: lasted
+kind: Service
+metadata:
+  name: api-service
+spec:
+  selector:
+    app: deployment-container-back
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

@@ -1,0 +1,22 @@
+apiVersion: apps/lasted
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-container-front
+  template:
+    metadata:
+      labels:
+        app: deployment-container-front
+    spec:
+      containers:
+      - name: deployment-container-front
+        image: imagem-container-front:lasted
+        ports:
+        - containerPort: 80
+        env:
+        - name: API_URL
+          value: http://api-service

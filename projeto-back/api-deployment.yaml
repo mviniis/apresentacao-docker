@@ -1,0 +1,26 @@
+apiVersion: apps/lasted
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-container-back
+  template:
+    metadata:
+      labels:
+        app: deployment-container-back
+    spec:
+      containers:
+      - name: deployment-container-back
+        image: imagem-container-back:lasted
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+          requests:
+            cpu: "250m"
+            memory: "64Mi"
