@@ -1,4 +1,4 @@
-apiVersion: lasted
+apiVersion: v1
 kind: Service
 metadata:
   name: api-service
@@ -8,5 +8,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8000
-  type: ClusterIP
+      targetPort: 80
+  type: LoadBalancer

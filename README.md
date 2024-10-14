@@ -8,36 +8,36 @@
 
 atualização dos pacotes disponíveis do sitema
 ```sh
-  sudo apt update
+sudo apt update
 ```
 
 instalação dos pacotes necessários para que alguns pacotes utilizem o HTTPS
 ```sh
-  sudo apt install apt-transport-https ca-certificates curl software-properties-common
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
 
 depois disso é necessário adicionar a chave GPG do repositório oficial do Docker
 ```sh
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-  sudo apt update
+sudo apt update
 ```
 
 é necessário também definir que a instalação será feita a partir depositório Docker, ao invés de um repositório padrão do Ubuntu
 ```sh
-  apt-cache policy docker-ce
+apt-cache policy docker-ce
 ```
 
 por fim, pode-se realizar a instalação do Docker
 ```sh
-  sudo apt install docker-ce
+sudo apt install docker-ce
 ```
 
 para executar o docker sem o sudo, basta realizar a configuração abaixo:
 ```sh
-  sudo usermod -aG docker ${USER}
+sudo usermod -aG docker ${USER}
 ```
 
 Após essa configuração, é necessário reiniciar o servidor, para que a aplicação do grupo seja efetuada no usuário logado
@@ -45,13 +45,13 @@ Após essa configuração, é necessário reiniciar o servidor, para que a aplic
 ## Criação de uma imagem
 Para criarmos um container, primeiro precisamos de uma imagem. Essa imagem, será utilizada para definir todas as bibliotecas e dependências que o nosso container deve possuir. Para isso, executamos o comando abaixo:
 ```sh
-  docker build -t imagem-container-back:lasted -f Dockerfile-back .
-  docker build -t imagem-container-front:lasted -f Dockerfile-front .
+docker build -t imagem-container-back:lastest -f Dockerfile-back .
+docker build -t imagem-container-front:lastest -f Dockerfile-front .
 ```
 
 Após finalizada a compilação, podemos verificar a criação das imagens, executando o comando abaixo:
 ```sh
-  docker images
+docker images
 ```
 
 ## Criação do container
@@ -59,8 +59,8 @@ Após a criação da imagem, é necessário realizar o deploy do nosso container
 
 Para criar um container, é necessário executar o comando abaixo:
 ```sh
-  docker run --name container_back_apresentacao -d -p 80:80 imagem-container-back:lasted
-  docker run --name container_front_apresentacao -d -p 80:80 imagem-container-front:lasted
+docker run --name container_back_apresentacao -d -p 80:80 imagem-container-back:lastest
+docker run --name container_front_apresentacao -d -p 80:80 imagem-container-front:lastest
 ```
 
 Existem várias opções de comandos que podem ser utilizados juntamente com o comando `docker run`, mas vamos passar somente nesses que utilizamos:
@@ -71,8 +71,8 @@ Existem várias opções de comandos que podem ser utilizados juntamente com o c
 ## Finalização de execução
 Depois de utilizado, basta você executar o comando abaixo, para parar a execução do container:
 ```sh
-  docker stop container_front_apresentacao
-  docker stop container_back_apresentacao
+docker stop container_front_apresentacao
+docker stop container_back_apresentacao
 ```
 
 # Orquestração de containeres
@@ -81,26 +81,26 @@ Depois de utilizado, basta você executar o comando abaixo, para parar a execuç
 
 Utilizando os comandos abaixo, podemos realizar a instalação do kubectl, que é uma ferramenta de linha de comando que vai permitir com que nós consigamos interagir com os clusters kubernetes.
 ```sh
-  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 
-  sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
 
 Depois de instalado do kubectl, precisamos realizar a instalação de uma ferramenta que vai nos permitir executar o kubernetes de forma local. Para isso, vamos executar os comandos abaixo.
 ```sh
-  curl -LO https://github.com/kubernetes/minikube/releases/download/v1.34.0/minikube-linux-amd64
+curl -LO https://github.com/kubernetes/minikube/releases/download/v1.34.0/minikube-linux-amd64
 
-  chmod +x minikube-linux-amd64 && sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+chmod +x minikube-linux-amd64 && sudo mv minikube-linux-amd64 /usr/local/bin/minikube
 ```
 
 Depois de instalado, precisamos iniciar o minikube com o comando abaixo, para realizar a instação do cluster único que o minikube nos fornece.
 ```sh
-  minikube start
+minikube start
 ```
 
 Para visualizar se a instalação do cluster foi finalizada com sucesso, executaremos o comando abaixo. Esse comando, nos mostrará todos os nós criados pelo minikube. Nesse caso, todos os serviços que devem ser executados pelo kubernetes, será executado dentro desse nó.
 ```sh
-  kubectl get nodes
+kubectl get nodes
 ```
 
 ## Configuração do escalonamento
@@ -109,6 +109,31 @@ Depois de ter instalado o minikube e o kubectl, precisamos realizar a configura�
 
 Para isso, executamos o comando abaixo:
 ```sh
-  eval $(minikube docker-env)
+eval $(minikube docker-env)
 ```
 
+Depois precisamos criar os deployments referentes as imagens das nossas aplicações de teste. Esses deployments, são objetos que referenciam uma aplicação que está em execução no cluster. Para isso, precisamos executar os comandos abaixo:
+```sh
+kubectl apply -f projeto-back/api-deployment.yaml
+kubectl apply -f projeto-front/app-deployment.yaml
+```
+
+Após isso, vamos criar os services, que vão fazer com que a nossa aplicação funcione. Então, executamos os comandos abaixo:
+```sh
+kubectl apply -f projeto-back/api-service.yaml
+kubectl apply -f projeto-front/app-service.yaml
+```
+
+Depois de configurado, podemos verificar se os nossos pods foram criados e estão ativos. Então, executamos o comando abaixo:
+```sh
+kubectl get pods
+```
+
+Estando tudo configurado e sendo executado, vamos precisar expor as nossas aplicações para consumo externo. Para isso, precisamos executar o comando abaixo. Isso fará com que consigamos acessar a aplicação pelo navegador.
+```sh
+minikube tunnel
+```
+
+Veremos que, quando executarmos o teste de carga, ocorrerá problemas de rede. Isso acontece, porque a API não está sendo executadas mais em 'localhost'. Para fazer voltar a funcionar, precisamos alterar a URL do ajax para `http://api-service`. Dessa forma, como a requisição está sendo feita dentro de um container, o kubernetes possui um DNS interno, para conseguir orquestar as requisições entre containeres.
+
+Depois de alterado, precisamos refazer a imagem e atualizar o pod do frontend com essa nova versão.

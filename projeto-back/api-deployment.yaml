@@ -1,4 +1,4 @@
-apiVersion: apps/lasted
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-deployment
@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: deployment-container-back
-        image: imagem-container-back:lasted
+        image: imagem-container-back:lastest
         ports:
-        - containerPort: 8000
+        - containerPort: 80
         resources:
           limits:
             cpu: "500m"

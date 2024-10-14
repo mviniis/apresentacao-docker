@@ -1,10 +1,10 @@
-apiVersion: autoscaling/lasted
+apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: api-hpa
 spec:
   scaleTargetRef:
-    apiVersion: apps/lasted
+    apiVersion: apps/v1
     kind: Deployment
     name: api-deployment
   minReplicas: 1
