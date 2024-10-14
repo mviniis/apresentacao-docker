@@ -102,3 +102,13 @@ Para visualizar se a instalação do cluster foi finalizada com sucesso, executa
 ```sh
   kubectl get nodes
 ```
+
+## Configuração do escalonamento
+
+Depois de ter instalado o minikube e o kubectl, precisamos realizar a configuração de escalonamento dos nossos containeres dentro. Para isso, precisamos enviar as imagens que geramos a alguns passos antes, para dentro do minikube. Isso se deve ao fato, do ambiente do minikube estar isolado da máquina hospedeira. Ele permitirá com que utilizemos o docker dentro do minikube e então podemos realizar o build da imagem novamente.
+
+Para isso, executamos o comando abaixo:
+```sh
+  eval $(minikube docker-env)
+```
+
