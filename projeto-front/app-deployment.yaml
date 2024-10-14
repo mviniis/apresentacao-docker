@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: deployment-container-front
-        image: imagem-container-front:lasted
+        image: imagem-container-front:lastest
         ports:
         - containerPort: 80
         env:
