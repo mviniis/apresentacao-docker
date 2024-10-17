@@ -129,11 +129,16 @@ Depois de configurado, podemos verificar se os nossos pods foram criados e estã
 kubectl get pods
 ```
 
-Estando tudo configurado e sendo executado, vamos precisar expor as nossas aplicações para consumo externo. Para isso, precisamos executar o comando abaixo. Isso fará com que consigamos acessar a aplicação pelo navegador.
+Estando tudo configurado e sendo executado, vamos precisar expor as nossas aplicações para consumo externo, portanto, precisamos executar o comando abaixo. Isso fará com que consigamos acessar as aplicações pelo navegador.
 ```sh
 minikube tunnel
 ```
 
-Veremos que, quando executarmos o teste de carga, ocorrerá problemas de rede. Isso acontece, porque a API não está sendo executadas mais em 'localhost'. Para fazer voltar a funcionar, precisamos alterar a URL do ajax para `http://api-service`. Dessa forma, como a requisição está sendo feita dentro de um container, o kubernetes possui um DNS interno, para conseguir orquestar as requisições entre containeres.
+Veremos que, quando executarmos o teste de carga, ocorrerá problemas de rede. Isso acontece, porque o acesso ao pod, não está liberado para acesso remoto, ou seja, acessos feitos fora do contexto do kubernetes. Para ajustar isso, precisamos 'liberar' o acesso ao pod da nosssa API, para tal, podemos executar o comando abaixo:
+```sh
+kubectl port-forward service/api-service 8000:80
+```
 
-Depois de alterado, precisamos refazer a imagem e atualizar o pod do frontend com essa nova versão.
+Com isso, estamos dizendo que todas as requisições que forem feitas para a porta 8000 da máquina host, serão redirecionadas para a porta 80 do pod da API.
+
+Feito isso, agora os ajaxs que estavam sendo feitos pela aplicação frontend, vão começar a dar sucesso. Mas se formos aumentando a quantidade de requisições, vamos 
