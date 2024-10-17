@@ -141,4 +141,23 @@ kubectl port-forward service/api-service 8000:80
 
 Com isso, estamos dizendo que todas as requisições que forem feitas para a porta 8000 da máquina host, serão redirecionadas para a porta 80 do pod da API.
 
-Feito isso, agora os ajaxs que estavam sendo feitos pela aplicação frontend, vão começar a dar sucesso. Mas se formos aumentando a quantidade de requisições, vamos 
+Feito isso, agora os ajaxs que estavam sendo feitos pela aplicação frontend, vão começar a dar sucesso. Mas se formos aumentando a quantidade de requisições, vamos notar que essas requisições vão começar a demorar um tempo considerável para retornar. Isso se deve ao fato de que, o processamento dessas requisições estão demorando muito para serem processados, por conta da disponibilidade de recursos do pod, ou seja, o consumo da CPU daquele pod está muito alto.
+
+Para visualizarmos isso, executamos o comando abaixo:
+```sh
+kubectl top pod <nome-do-pod>
+```
+
+A partir desse momento, precisamos de uma ação, para que esses pods não consumam tantos recursos, e o tráfego de requisições possa ser balanceado. Para isso, precisamos configurar uma ferramenta chamada HPA do kubernetes. Essa ferramenta irá criar novos pods de acordo com as regras que implementarmos, e distribuir as requisições entre o pod original e os pods replicados. Isso faz com que não voltemos a cair no cenário anterior, que por conta da alta demanda em um pod, esse serviço possa ficar indisponível.
+
+Para configurar isso, basta executarmos o comando abaixo:
+```sh
+kubectl apply -f projeto-back/api-hpa.yaml
+```
+
+Esse comando irá aplicar as regras de criação automática de novos pods quando a métrica de CPU atingir o limite designado dentro pela configuração desse arquivo. Vale resaltar também, que isso serve também para derrubar os pods replicados. Ou seja, se a CPU ultrapassar o limite definido, a regra do HPA será executada e gerará novos pods, até que a carga de acesso diminiua. Caso as requisições diminuam para uma métrica abaixdo do que foi configurado, o HPA também entrará em ação, para remover os pods que não estão mais sendo utilizados.
+
+Para verificarmos as métricas em ação, basta executarmos o comando abaixo:
+```sh
+kubectl get hpa
+```
