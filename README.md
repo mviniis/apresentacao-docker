@@ -45,8 +45,8 @@ Após essa configuração, é necessário reiniciar o servidor, para que a aplic
 ## Criação de uma imagem
 Para criarmos um container, primeiro precisamos de uma imagem. Essa imagem, será utilizada para definir todas as bibliotecas e dependências que o nosso container deve possuir. Para isso, executamos o comando abaixo:
 ```sh
-docker build -t imagem-container-back:lastest -f Dockerfile-back .
-docker build -t imagem-container-front:lastest -f Dockerfile-front .
+docker build -t imagem-container-back:latest -f Dockerfile-back .
+docker build -t imagem-container-front:latest -f Dockerfile-front .
 ```
 
 Após finalizada a compilação, podemos verificar a criação das imagens, executando o comando abaixo:
@@ -59,8 +59,8 @@ Após a criação da imagem, é necessário realizar o deploy do nosso container
 
 Para criar um container, é necessário executar o comando abaixo:
 ```sh
-docker run --name container_back_apresentacao -d -p 80:80 imagem-container-back:lastest
-docker run --name container_front_apresentacao -d -p 80:80 imagem-container-front:lastest
+docker run --name container_back_apresentacao -d -p 80:80 imagem-container-back:latest
+docker run --name container_front_apresentacao -d -p 80:80 imagem-container-front:latest
 ```
 
 Existem várias opções de comandos que podem ser utilizados juntamente com o comando `docker run`, mas vamos passar somente nesses que utilizamos:
