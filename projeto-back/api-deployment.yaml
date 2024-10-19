@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: deployment-container-back
-        image: imagem-container-back:lastest
+        image: imagem-container-back:latest
         ports:
         - containerPort: 80
         resources:
